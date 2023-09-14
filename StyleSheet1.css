@@ -1,0 +1,19 @@
+﻿body {
+    font: bold 14px arial;
+    color: black;
+    background-color: white;
+    text-align: center;
+}
+
+h1{
+    color:black;
+}
+
+label {
+    font: bold 14px arial;
+}
+
+div{
+    display:block;
+    border:0px solid;
+}

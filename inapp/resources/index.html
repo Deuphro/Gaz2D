@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
+    <link rel="stylesheet" href="StyleSheet1.css" />
+</head>
+<body>
+    <h1>Two dimensions simulation</h1>
+    <div>
+        <table style="width:100%; border:0px solid">
+            <tr>
+                <td style="border:0px solid" width="50%">
+                    <div style="width:100%">
+                        <canvas id="brut" width="1000" height="1000" style="width:100%;border:1px solid"></canvas>
+                    </div>
+                </td>
+                <td style="border:0px solid" width="50%">
+                    <div style="width:100%;border:0px solid">
+                        <form>
+                            The world is: a
+                            <label for="box">box</label>
+                            <input type="radio" name="world" id="box" value="box" />
+                            ; or a
+                            <label for="torus">torus</label>
+                            <input type="radio" name="world" id="torus" value="torus" />
+                            <hr />
+                            <label for="nbptcl">Particle number</label>
+                            <input type="number" id="nbptcl" name="nbptcl" min="1" max="5000" value="500" size="7" />
+                            <input type="button" id="set" value="Set" />
+                            <hr />
+                            <label for="inRadius">Radius</label>
+                            <input type="number" id="inRadius" name="inRadius" min="0" max="1" value="0.01" step="0.005" size="7" />
+                            <label for="inMass">Mass</label>
+                            <input type="number" id="inMass" name="inMass" min="0" max="200" value="1" step="0.5" size="7" />
+                            <label for="inCharge">Charge</label>
+                            <input type="number" id="inCharge" name="inCharge" min="-5" max="5" value="0" step="0.01" size="7" />
+                            <label for="inColor">Color</label>
+                            <input type="color" id="inColor" name="inColor" />
+                            <input type="button" id="updateGas" value="Update" /><br />
+                            <hr />
+                            <input type="button" id="LaunchSimu" value="Start simulation" />
+                            <input type="button" id="StopSimu" value="Stop simulation" />
+                            <input type="button" id="hup" value="Heat up" />
+                            <input type="button" id="cdo" value="Cool down" />
+                            <input type="button" id="fre" value="Freeze" />
+                            <hr />
+                            <input type="button" id="setChem" value="Set Basic chemistry" />
+                        </form>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%">
+            <tr>
+                <td style="width:50%">
+                    <div>
+                        <canvas id="graph1" style="border:1px solid"></canvas>
+                    </div>
+                    <div>
+                        <form>
+                            <input type="button" id="Monitor1" value="Monitor Energy" />
+                            <input type="button" id="Rec1" value="Record" />
+                            <input type="button" id="Res1" value="Reset" />
+                            <input type="button" id="Stop1" value="Stop" />
+                        </form>
+                    </div>
+                </td>
+                <td style="width: 50%">
+                    <div>
+                        <canvas id="graph2" style="border:1px solid"></canvas>
+                        
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="file" id="file-input" />
+                    <h3>Contents of the file:</h3>
+                    <pre id="file-content"></pre>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="index.js">
+
+    </script>
+
+    <script>
+
+    </script>
+</body>
+</html>
