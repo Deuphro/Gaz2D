@@ -51,7 +51,7 @@ class Ball {
 }
 
 class Gas {
-    constructor(n, masse, radius, charge, color,boundType,viscosity=0) {
+    constructor(n, masse, radius, charge, color,boundType,viscosity=0,gravity=0) {
         let k;
         let balls = [];
         for (k = 0; k < n; k++) {
@@ -70,6 +70,7 @@ class Gas {
         this.isAnimated = false;
         this.probe=[];
         this.vis=viscosity;
+        this.gra=gravity
     }
     get n() {
         return this.elt.length;
@@ -241,13 +242,29 @@ class Gas {
     }
 
     makeDipoles(){
+        let dis=0
+        let Ur=[0,0]
+        let a,b
+        let R=0
+        let K=1
         for(let k=1;k<this.n;k+=2){
-            this.elt[k].friends.push(k-1)
-            this.elt[k].cha=0.001
-            this.elt[k].col='crimson'
-            this.elt[k-1].cha=-0.001
-            this.elt[k-1].col='darkturquoise'
+            a=this.elt[k]
+            b=this.elt[k-1]
+            R=3*(a.rad+b.rad)
+            a.friends.push(k-1)
+            a.cha=document.getElementById("inCharge").valueAsNumber
+            a.col='crimson'
+            b.cha=-document.getElementById("inCharge").valueAsNumber
+            b.col='darkturquoise'
+            dis = Math.sqrt((a.pos[0] - b.pos[0]) ** 2 + (a.pos[1] - b.pos[1]) ** 2)
+            Ur=[(b.pos[0]-a.pos[0])/dis,(b.pos[1]-a.pos[1])/dis]
+            b.pos[0] += Ur[0]*(R-dis)*(b.mas)*K/(a.mas+b.mas)
+            b.pos[1] += Ur[1]*(R-dis)*(b.mas)*K/(a.mas+b.mas)
+            a.pos[0] -= Ur[0]*(R-dis)*(a.mas)*K/(a.mas+b.mas)
+            a.pos[1] -= Ur[1]*(R-dis)*(a.mas)*K/(a.mas+b.mas)
         }
+        this.clearBoard("brut",1,1)
+        this.draw("brut",1)
     }
 
     makeHexagones(){
@@ -350,6 +367,12 @@ class Gas {
     }
 
     chimie(a,b,p1,p2) {
+        for(let k of [a,b]){
+            if (k.col=="#ff0000"){k.col="red"}
+            if (k.col=="#0000ff"){k.col="blue"}
+            if (k.col=="#008000"){k.col="green"}
+            if (k.col=="#800080"){k.col="purple"}
+        }
         if (Math.random()<p1 && (a.col == jscolors[0] && b.col == jscolors[1]) || (a.col == jscolors[1] && b.col == jscolors[0])) {
             a.col = jscolors[2];
             b.col = jscolors[3];
@@ -366,12 +389,13 @@ class Gas {
         let Ur=[0,0]
         for (let friendex of ball.friends){
             b=this.elt[friendex]
+            R=3*(a.rad+b.rad)
             dis = Math.sqrt((a.pos[0] - b.pos[0]) ** 2 + (a.pos[1] - b.pos[1]) ** 2)
             Ur=[(b.pos[0]-a.pos[0])/dis,(b.pos[1]-a.pos[1])/dis]
-            b.vit[0] += Ur[0]*(R-dis)*(a.mas+b.mas)*k/b.mas**2
-            b.vit[1] += Ur[1]*(R-dis)*(a.mas+b.mas)*k/b.mas**2
-            a.vit[0] -= Ur[0]*(R-dis)*(a.mas+b.mas)*k/a.mas**2
-            a.vit[1] -= Ur[1]*(R-dis)*(a.mas+b.mas)*k/a.mas**2
+            b.vit[0] += Ur[0]*(R-dis)*k/(a.mas+b.mas)
+            b.vit[1] += Ur[1]*(R-dis)*k/(a.mas+b.mas)
+            a.vit[0] -= Ur[0]*(R-dis)*k/(a.mas+b.mas)
+            a.vit[1] -= Ur[1]*(R-dis)*k/(a.mas+b.mas)
         }
     }
     
@@ -390,7 +414,7 @@ class Gas {
     extFields() {
         for (let k = 0; k < this.n; k++) {
             //weight:
-            this.elt[k].vit[1] -= 0.000001;
+            this.elt[k].vit[1] -= this.gra;
             //viscosity:
             this.elt[k].vit.forEach((e,i,a)=>{a[i]-=this.vis*a[i]})
         }
@@ -515,7 +539,7 @@ class Gas {
             //gas.kruskal(canvasName, border);
             gas.clearBoard(canvasName, border,0.05);
             gas.draw(canvasName, border);
-            document.getElementById('brkdwnHolder').innerText=gas.racism.toString();
+            document.getElementById('brkdwnHolder').innerText=gas.n;
             gas.animId=requestAnimationFrame(fullLoop);
         }
         if (gonogo) {
@@ -802,9 +826,32 @@ document.getElementById("set").addEventListener('click', (e) => {
     cur.gases[0].probe[0].chart.destroy();
     cur.gases[0].probe[1].chart.destroy();
     cur.gases[0] = new Gas(n, m, r, c, colo, bt);
+    cur.gases[0].vis=document.getElementById("inViscosity").valueAsNumber;
+    cur.gases[0].gra=document.getElementById("inGravity").valueAsNumber;
     cur.gases[0].setProbe("graph1", "Energy");
     cur.gases[0].setRacistProbe("graph2","Chemistry");
     cur.gases[0].clearBoard("brut", 1, 1);
+    cur.gases[0].draw("brut", 1);
+})
+
+document.getElementById("add").addEventListener('click', (e) => {
+    console.log("on essaye d'add !");
+    
+    const n = document.getElementById("nbptcl").valueAsNumber;
+    const m = document.getElementById("inMass").valueAsNumber;
+    const r = document.getElementById("inRadius").valueAsNumber;
+    const c = document.getElementById("inCharge").valueAsNumber;
+    const colo = (document.getElementById("inColor").value=="#000000" ? 'black' : document.getElementById("inColor").value);
+    for (k = 0; k < n; k++) {
+        cur.gases[0].elt.push(new Ball(
+            [2 * Math.random() - 1, 2 * Math.random() - 1],
+            [(2 * Math.random() - 1) * 0.001, (2 * Math.random() - 1) * 0.001],
+            m,
+            r,
+            c,
+            colo
+        ));
+    }
     cur.gases[0].draw("brut", 1);
 })
 
@@ -843,6 +890,16 @@ document.getElementById("cdo").addEventListener('click', function (e) {
 }
 );
 
+document.getElementById("inViscosity").addEventListener('change', function (e) {
+    cur.gases[0].vis=e.target.valueAsNumber;
+}
+);
+
+document.getElementById("inGravity").addEventListener('change', function (e) {
+    cur.gases[0].gra=e.target.valueAsNumber;
+}
+);
+
 document.getElementById("fre").addEventListener('click', function (e) {
     cur.gases[0].heat(0.0);
 }
@@ -854,6 +911,10 @@ document.getElementById("setChem").addEventListener('click', function (e) {
     cur.gases[0].draw("brut", 1);
 }
 );
+
+document.getElementById("setDipoles").addEventListener('click',function (e) {
+    cur.gases[0].makeDipoles();
+})
 
 document.getElementById("Monitor1").addEventListener('click', function (e) {
     cur.gases[0].monitorProbe(0,"Energy",true,150);

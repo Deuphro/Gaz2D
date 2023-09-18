@@ -30,6 +30,7 @@
                             <label for="nbptcl">Particle number</label>
                             <input type="number" id="nbptcl" name="nbptcl" min="1" max="5000" value="500" size="7" />
                             <input type="button" id="set" value="Set" />
+                            <input type="button" id="add" value="Add" />
                             <hr />
                             <label for="inRadius">Radius</label>
                             <input type="number" id="inRadius" name="inRadius" min="0" max="1" value="0.01" step="0.005" size="7" />
@@ -41,6 +42,11 @@
                             <input type="color" id="inColor" name="inColor" />
                             <input type="button" id="updateGas" value="Update" /><br />
                             <hr />
+                            <label for="viscosity">Viscosity</label>
+                            <input type="number" id="inViscosity" name="inViscosity" min="0" max="1" value="0" step="0.01" size="7"/>
+                            <label for="gravity">Gravity</label>
+                            <input type="number" id="inGravity" name="inGravity" min="0" value="0" step="0.000001" size="9"/>
+                            <hr />
                             <input type="button" id="LaunchSimu" value="Start simulation" />
                             <input type="button" id="StopSimu" value="Stop simulation" />
                             <input type="button" id="hup" value="Heat up" />
@@ -48,15 +54,16 @@
                             <input type="button" id="fre" value="Freeze" />
                             <hr />
                             <input type="button" id="setChem" value="Set Basic chemistry" />
+                            <input type="button" id="setDipoles" value="Make dipoles" />
                         </form>
                         <hr/>
                         <div>
-                            <h1>
-                                Color Breakdown
+                            <p>
+                                Breakdown
                                 <div id="brkdwnHolder">
 
                                 </div>
-                            </h1>
+                            </p>
                         </div>
                     </div>
                 </td>
