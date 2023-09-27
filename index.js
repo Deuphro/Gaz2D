@@ -349,7 +349,7 @@ class Gas {
             b.pos[1] += 0.5 * a.mas / cenma * (secu - dis) * Un[1];
             a.pos[0] -= 0.5 * b.mas / cenma * (secu - dis) * Un[0];
             a.pos[1] -= 0.5 * b.mas / cenma * (secu - dis) * Un[1];
-            this.chimie(a, b,1,1);
+            this.chimie(a, b,document.getElementById("setForwardProbability").valueAsNumber,document.getElementById("setBackwardProbability").valueAsNumber);
         }
     }
 
@@ -952,6 +952,15 @@ document.getElementById("Stop2").addEventListener('click', function (e) {
     cur.gases[0].recordRacistProbe(1,false);
 }
 );
+document.getElementById("inRadius").addEventListener('change', function(e){
+    cur.gases[0].rad=e.target.valueAsNumber
+});
+document.getElementById("inMass").addEventListener('change', function(e){
+    cur.gases[0].mas=e.target.valueAsNumber
+});
+document.getElementById("inCharge").addEventListener('change', function(e){
+    cur.gases[0].cha=e.target.valueAsNumber
+});
 
 
 
@@ -970,30 +979,3 @@ function bench(n) {
     t2 = d2.getTime();
     console.log(res,t2-t1);
 }
-
-
-
-
-
-
-function readSingleFile(e) {
-    var file = e.target.files[0];
-    console.log(file)
-    if (!file) {
-        return;
-    }
-    var reader = new FileReader();
-    reader.onload = function (e) {
-        var contents = e.target.result;
-        displayContents(contents);
-    };
-    reader.readAsText(file);
-}
-
-function displayContents(contents) {
-    var element = document.getElementById('file-content');
-    element.textContent = contents;
-}
-
-document.getElementById('file-input')
-    .addEventListener('change', readSingleFile, false);

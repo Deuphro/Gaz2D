@@ -17,3 +17,11 @@ div{
     display:block;
     border:0px solid;
 }
+
+.chemCircle{
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 100%;
+    border:1px solid black
+}
