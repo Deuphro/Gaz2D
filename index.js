@@ -5,6 +5,10 @@ const jscolors = ['red','blue','green','purple','gold','Crimson', 'DarkTurquoise
 
 class Ball {
     constructor(position, vitesse, masse, radius, charge, color) {
+        if (color=="#ff0000"){color="red"}
+        if (color=="#0000ff"){color="blue"}
+        if (color=="#008000"){color="green"}
+        if (color=="#800080"){color="purple"}
         this.pos = position;
         this.vit = vitesse;
         this.mas = masse;
@@ -674,7 +678,7 @@ class Probe {
             }
             delete value[this.config.data.datasets[k].label]
         }
-        set={}
+        let set={}
         for (let k of Object.keys(value)) {
             set = {
                 borderColor: k,
@@ -702,7 +706,7 @@ class Probe {
             }
             delete value[this.config.data.datasets[k].label]
         }
-        set={}
+        let set={}
         for (let k of Object.keys(value)) {
             set = {
                 borderColor: k,
